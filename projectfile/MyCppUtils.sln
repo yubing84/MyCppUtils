@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonParse", "JsonParse.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyTimer", "TinyTimer.vcxproj", "{205927FB-7BAF-4BB1-BA57-E026780C808F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HttpClient", "HttpClient.vcxproj", "{2D398885-6A12-4AA2-9580-68F3060B0EE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{205927FB-7BAF-4BB1-BA57-E026780C808F}.Release|x64.Build.0 = Release|x64
 		{205927FB-7BAF-4BB1-BA57-E026780C808F}.Release|x86.ActiveCfg = Release|Win32
 		{205927FB-7BAF-4BB1-BA57-E026780C808F}.Release|x86.Build.0 = Release|Win32
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Debug|x64.ActiveCfg = Debug|x64
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Debug|x64.Build.0 = Debug|x64
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Debug|x86.ActiveCfg = Debug|Win32
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Debug|x86.Build.0 = Debug|Win32
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Release|x64.ActiveCfg = Release|x64
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Release|x64.Build.0 = Release|x64
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Release|x86.ActiveCfg = Release|Win32
+		{2D398885-6A12-4AA2-9580-68F3060B0EE0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
