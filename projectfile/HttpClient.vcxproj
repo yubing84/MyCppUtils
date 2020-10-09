@@ -159,10 +159,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\HttpClient\AsynHttpClient.cpp" />
     <ClCompile Include="..\src\HttpClient\HttpClient.cpp" />
     <ClCompile Include="..\src\HttpClient\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\HttpClient\AsynHttpClient.h" />
     <ClInclude Include="..\src\HttpClient\HttpClient.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

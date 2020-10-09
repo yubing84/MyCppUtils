@@ -208,7 +208,7 @@ int HttpClient::Gets(const std::string & strUrl, std::string & strResponse, cons
 		curl_easy_setopt(curl, CURLOPT_CAINFO, pCaPath);
 	}
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
-	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30);
 	res = curl_easy_perform(curl);
 	curl_easy_cleanup(curl);
 	return res;

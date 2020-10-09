@@ -3,8 +3,10 @@
   <ItemGroup>
     <ClCompile Include="..\src\HttpClient\main.cpp" />
     <ClCompile Include="..\src\HttpClient\HttpClient.cpp" />
+    <ClCompile Include="..\src\HttpClient\AsynHttpClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\HttpClient\HttpClient.h" />
+    <ClInclude Include="..\src\HttpClient\AsynHttpClient.h" />
   </ItemGroup>
 </Project>
