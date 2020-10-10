@@ -20,7 +20,7 @@ int main()
 	// 异步请求
 	AsynHttpClient asynClient;
 
-	asynClient.RegisterRequestFunc([](bool isSuccess, std::string response) {
+	asynClient.RegisterRequestCallbackFunc([](bool isSuccess, std::string response) {
 		std::cout <<"Http Get异步请求结果为：" <<response << std::endl;
 		});
 

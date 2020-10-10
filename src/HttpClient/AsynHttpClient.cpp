@@ -253,8 +253,6 @@ int AsynHttpClient::AsynPostJsonDataToServer(const std::string & strUrl, const s
 		std::string strJsonDataUtf8 = ASCII2UTF8(strJsonData.c_str());
 
 		//构建HTTP报文头  
-		char tmp_str[256] = { 0 };
-		sprintf_s(tmp_str, "Content-Length: %s", strJsonDataUtf8.c_str());
 		//headers = curl_slist_append(headers, "Content-Type:application/json;charset=UTF-8");
 		headers = curl_slist_append(headers, "Content-Type:application/json");
 		curl_easy_setopt(curl, CURLOPT_URL, strUrl.c_str());							// 设置url
