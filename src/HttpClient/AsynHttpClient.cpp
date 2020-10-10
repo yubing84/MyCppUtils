@@ -92,7 +92,7 @@ AsynHttpClient::~AsynHttpClient()
 {
 }
 
-void AsynHttpClient::RegisterRequestFunc(RequestFunc func)
+void AsynHttpClient::RegisterRequestCallbackFunc(RequestFunc func)
 {
 	m_RequestFunc = func;
 }

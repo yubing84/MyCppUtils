@@ -19,7 +19,7 @@ public:
 	* @brief 注册请求回调函数
 	* @param func 输入参数，需要回调的可调用对象
 	*/
-	void RegisterRequestFunc(RequestFunc func);
+	void RegisterRequestCallbackFunc(RequestFunc func);
 
 	/**
 	* @brief 异步HTTP GET请求
