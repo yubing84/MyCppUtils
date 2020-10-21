@@ -10,3 +10,4 @@ MyCppUtils包含了一些C++在实际项目开发过程常用的一些工具代�
 - Websocket ： 基于Websocket++的Webscoket客户端示例项目
 - Singleton : 单例模板工具项目，使用智能指针与mutex，支持多线程访问安全与自动GC
 - StringFormat : 字符串格式化工具示例项目
+- UUID : 在Window和Linux可用的UUID生成工具类
