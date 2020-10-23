@@ -22,6 +22,7 @@ public:
 	// 发送数据
 	bool SendDataToRemoteServer(const char* data,int length);
 
+	// 关闭套接字
 	void CloseSocket();
 private:
 	SOCKADDR_IN m_RemoteServerAddress;
