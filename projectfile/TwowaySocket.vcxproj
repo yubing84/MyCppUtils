@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6e4f1ad8-a34e-4ba7-a310-b547b6c23e16}</ProjectGuid>
-    <RootNamespace>AsynServerSocket</RootNamespace>
+    <ProjectGuid>{50f49443-d96f-4ca9-808f-0aa82ce0406e}</ProjectGuid>
+    <RootNamespace>TwowaySocket</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,11 +151,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\AsynServerSocket\AsynServerSocket.cpp" />
-    <ClCompile Include="..\src\AsynServerSocket\main.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\AsynClientSocket.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\AsynServerSocket.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\main.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\TwowaySocket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\AsynServerSocket\AsynServerSocket.h" />
+    <ClInclude Include="..\src\TwowaySocket\AsynClientSocket.h" />
+    <ClInclude Include="..\src\TwowaySocket\AsynServerSocket.h" />
+    <ClInclude Include="..\src\TwowaySocket\TwowaySocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

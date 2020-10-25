@@ -13,40 +13,14 @@
 #include <mutex>
 #include <iostream>
 #include <atomic>
+#include <functional>
 
-class tcpthread
-{
-public:
-	void Main()
-	{
-		char buf[1024] = { 0 };//接收信息的最大长度，记位buf
-		while (true)
-		{
-			int recvlen = recv(client, buf, sizeof(buf) - 1, 0);//windows没有read函数，linux才有
-			if (recvlen <= 0)break;//没有收到
-			if (strstr(buf, "q") != NULL)//按q退出
-			{
-				char re[] = "quit success!!!\n";
-				send(client, re, strlen(re) + 1, 0);//加1是因为还有\0
-				break;
-			}
-			int sendlen = send(client, "ok\n", 3, 0);//linux可以使用write
-			std::cout << "receive:" << buf << std::endl;
-			//len是接收数据的实际大小，len<=buf长度（这里是1024）
-		}
-
-
-		closesocket(client);//关闭连接
-
-	}
-	int client = 0;
-};
-
+typedef std::function<bool(const std::string& message)> ServerMessageCallbackFunc;
 
 class AsynServerSocket
 {
 public:
-	//typedef std::shared_ptr<AsynServerSocket> ptr;
+	typedef std::shared_ptr<AsynServerSocket> ptr;
 	AsynServerSocket();
 	virtual~AsynServerSocket() = default;
 
@@ -59,6 +33,8 @@ public:
 
 	// 关闭服务器
 	void CloseServer();
+
+	void RegisterServerMessageCallbackFunc(ServerMessageCallbackFunc func);
 private:
 	void ServerProcessThreadFunction();
 
@@ -73,6 +49,8 @@ private:
 	std::mutex m_SingleSocketMutex;
 
 	std::atomic<bool> m_IsCloseServer;
+
+	ServerMessageCallbackFunc m_ServerMessageCallbackFunc;
 };
 
 #endif // !ASYN_SERVER_SOCKET_H

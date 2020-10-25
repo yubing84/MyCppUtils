@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\TwowaySocket\main.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\TwowaySocket.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\AsynClientSocket.cpp" />
+    <ClCompile Include="..\src\TwowaySocket\AsynServerSocket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\TwowaySocket\TwowaySocket.h" />
+    <ClInclude Include="..\src\TwowaySocket\AsynClientSocket.h" />
+    <ClInclude Include="..\src\TwowaySocket\AsynServerSocket.h" />
+  </ItemGroup>
+</Project>

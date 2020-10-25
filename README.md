@@ -13,3 +13,4 @@ MyCppUtils包含了一些C++在实际项目开发过程常用的一些工具代�
 - UUID : 在Window和Linux可用的UUID生成工具类
 - AsynClientSocket ： 异步的Socket客户端
 - AsynServerSocket ：异步的Socket服务端
+- TwowaySocket：既做Socket服务器同时也做Socket客户端的栗子

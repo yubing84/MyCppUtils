@@ -1,15 +1,34 @@
 #include <iostream>
 #include "AsynServerSocket.h"
 
+#include "conio.h"
+
 using namespace std;
 
 int main()
 {
 	AsynServerSocket serverSocket;
-	serverSocket.SetServerSocketIPAndPort("1994");
+	serverSocket.SetServerPort("1994");
 
 	serverSocket.CreateServerSocket();
 
+	std::cout << "创建服务器完成" << std::endl;
+
+	while (true)
+	{
+		if (_kbhit()) // 如果有按键被按下
+		{
+			if (_getch() == 'e')
+			{
+				std::cout << "关闭服务器" << std::endl;
+
+				serverSocket.CloseServer();
+
+				break;
+			}
+
+		}
+	}
 
 	getchar();
 

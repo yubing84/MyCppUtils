@@ -98,6 +98,11 @@ void AsynServerSocket::CloseServer()
 	m_ServerMainThreadPtr->join();
 }
 
+void AsynServerSocket::RegisterServerMessageCallbackFunc(ServerMessageCallbackFunc func)
+{
+	m_ServerMessageCallbackFunc = func;
+}
+
 void AsynServerSocket::ServerProcessThreadFunction()
 {
 	while (true)
@@ -130,9 +135,7 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 	{
 		char recvBuf[1024] = {0};
 
-		int recvlen = recv(clientSocket, recvBuf, sizeof(recvBuf) - 1, 0);
-
-		std::cout << "收到客户端消息:" << recvBuf << std::endl;
+		int recvlen = recv(clientSocket, recvBuf, sizeof(recvBuf) - 1, 0);	
 
 		// 客户端已关闭连接
 		if (recvlen == 0)
@@ -148,6 +151,16 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 		{
 
 			break;
+		}
+		else if (recvlen > 0)
+		{
+			std::cout << "收到客户端消息:" << recvBuf << std::endl;
+			
+			if (m_ServerMessageCallbackFunc != nullptr)
+			{
+				m_ServerMessageCallbackFunc(recvBuf);
+			}
+
 		}	
 	}
 

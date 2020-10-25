@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsynClientSocket", "AsynCli
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsynServerSocket", "AsynServerSocket.vcxproj", "{6E4F1AD8-A34E-4BA7-A310-B547B6C23E16}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwowaySocket", "TwowaySocket.vcxproj", "{50F49443-D96F-4CA9-808F-0AA82CE0406E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{6E4F1AD8-A34E-4BA7-A310-B547B6C23E16}.Release|x64.Build.0 = Release|x64
 		{6E4F1AD8-A34E-4BA7-A310-B547B6C23E16}.Release|x86.ActiveCfg = Release|Win32
 		{6E4F1AD8-A34E-4BA7-A310-B547B6C23E16}.Release|x86.Build.0 = Release|Win32
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Debug|x64.ActiveCfg = Debug|x64
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Debug|x64.Build.0 = Debug|x64
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Debug|x86.ActiveCfg = Debug|Win32
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Debug|x86.Build.0 = Debug|Win32
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Release|x64.ActiveCfg = Release|x64
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Release|x64.Build.0 = Release|x64
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Release|x86.ActiveCfg = Release|Win32
+		{50F49443-D96F-4CA9-808F-0AA82CE0406E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

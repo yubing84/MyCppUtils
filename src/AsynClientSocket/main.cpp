@@ -32,7 +32,7 @@ int main()
 			}
 			else if (_getch() == 'e')
 			{
-				clientSocket.CloseSocket();
+				clientSocket.CloseClient();
 
 				break;
 			}
