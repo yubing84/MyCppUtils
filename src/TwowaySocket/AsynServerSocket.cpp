@@ -4,6 +4,59 @@
 
 #include <iostream>
 
+std::string UTF82ASCII(const char* cont)
+{
+	if (NULL == cont)
+	{
+		return std::string("");
+	}
+	int num = MultiByteToWideChar(CP_UTF8, NULL, cont, -1, NULL, NULL);
+	wchar_t* buffw = new wchar_t[(unsigned int)num];
+	MultiByteToWideChar(CP_UTF8, NULL, cont, -1, buffw, num);
+	int len = WideCharToMultiByte(CP_ACP, 0, buffw, num - 1, NULL, NULL, NULL, NULL);
+	char* lpsz = new char[(unsigned int)len + 1];
+	WideCharToMultiByte(CP_ACP, 0, buffw, num - 1, lpsz, len, NULL, NULL);
+	lpsz[len] = '\0';
+	delete[] buffw;
+	std::string rtn(lpsz);
+	delete[] lpsz;
+	return rtn;
+}
+
+//int 转 4字节 BYTE[],
+void intToByte(int i, BYTE abyte[],int size= 4)
+{
+	memset(abyte, 0, sizeof(byte) * size);
+
+	abyte[3] = (byte)(0xff & i);
+
+	abyte[2] = (byte)((0xff00 & i) >> 8);
+
+	abyte[1] = (byte)((0xff0000 & i) >> 16);
+
+	abyte[0] = (byte)((0xff000000 & i) >> 24);
+
+}
+
+//4字节 BYTE[] 转 int 
+int bytesToInt(BYTE bytes[])
+{
+
+	int addr = bytes[3] & 0xFF;
+
+	addr |= ((bytes[2] << 8) & 0xFF00);
+
+	addr |= ((bytes[1] << 16) & 0xFF0000);
+
+	addr |= ((bytes[0] << 24) & 0xFF000000);
+
+	//long int result = (x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3];   
+
+	return addr;
+}
+
+
+
 AsynServerSocket::AsynServerSocket()
 {
 	m_IsCloseServer = false;
@@ -15,7 +68,8 @@ void AsynServerSocket::SetServerPort(const char* port)
 	SOCKADDR_IN		serverAddress;
 
 	serverAddress.sin_family = AF_INET;
-	inet_pton(AF_INET,"127.0.0.1", (void*)&serverAddress.sin_addr.S_un.S_addr);
+
+	inet_pton(AF_INET, "0.0.0.0", (void*)&serverAddress.sin_addr.S_un.S_addr);
 
 	// 端口字符型转int型
 	std::istringstream intStr(port);
@@ -135,7 +189,7 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 	{
 		char recvBuf[1024] = {0};
 
-		int recvlen = recv(clientSocket, recvBuf, sizeof(recvBuf) - 1, 0);	
+		int recvlen = recv(clientSocket, recvBuf, sizeof(recvBuf) , 0);	
 
 		// 客户端已关闭连接
 		if (recvlen == 0)
@@ -154,12 +208,75 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 		}
 		else if (recvlen > 0)
 		{
-			std::cout << "收到客户端消息:" << recvBuf << std::endl;
-			
-			if (m_ServerMessageCallbackFunc != nullptr)
+			//recvBuf[recvlen] = '\0';
+
+			// 得到协议格式中数据的长度
+			char dataLengthStr[4];
+			memcpy(dataLengthStr, recvBuf, 4);
+			int dataLength = bytesToInt((byte*)dataLengthStr);
+
+			// 得到当前消息体的数据的长度
+			int messageLength = recvlen - 4;
+
+			char* dataStr = new char[dataLength+1];
+
+			memset(dataStr, 0, dataLength);
+
+			memcpy(dataStr, recvBuf + 4, messageLength);
+
+			int writeDataLength = messageLength;
+
+			while (writeDataLength < dataLength)
 			{
-				m_ServerMessageCallbackFunc(recvBuf);
+				char buffer[1024] = { 0 };
+
+				int recvbufferLen = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+				// 客户端已关闭连接
+				if (recvbufferLen == 0)
+				{
+					std::cout << "socket连接关闭" << std::endl;
+
+					closesocket(socket);
+
+					break;
+				}
+				// 出错
+				else if (recvbufferLen == -1)
+				{
+
+					break;
+				}
+				else if (recvbufferLen > 0)
+				{
+					int tempWriteDataLength = writeDataLength + recvbufferLen;
+
+					if (tempWriteDataLength >= dataLength)
+					{
+						memcpy(dataStr + writeDataLength -1, buffer, dataLength - writeDataLength);
+
+						//break;
+					}
+					else
+					{
+						memcpy(dataStr + writeDataLength -1 , buffer, recvbufferLen);
+					}
+
+					writeDataLength = tempWriteDataLength;
+
+				}
 			}
+
+			dataStr[dataLength] = '\0';
+
+			std::cout << "收到客户端的数据：" << dataStr << std::endl;
+			//for (int i = 0; i < dataLength; ++i)
+			//{
+			//	std::cout << dataStr[i];
+			//}
+			//std::cout << std::endl;
+
+			delete[] dataStr;
 
 		}	
 	}

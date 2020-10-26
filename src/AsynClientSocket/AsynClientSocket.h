@@ -7,6 +7,7 @@
 #pragma comment(lib, "ws2_32.lib")
 
 #include <memory>
+#include <string>
 
 class AsynClientSocket
 {
@@ -23,7 +24,7 @@ public:
 	bool CreateAndConnectToRemoteServer();
 
 	// 发送数据
-	bool SendDataToRemoteServer(const char* data,int length);
+	bool SendDataToRemoteServer(const std::string& str);
 
 	// 关闭套接字
 	void CloseClient();
