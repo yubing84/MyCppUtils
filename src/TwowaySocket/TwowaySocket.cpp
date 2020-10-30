@@ -62,11 +62,3 @@ void TwowaySocket::SendDataToRemoteServer(const char* data, int length)
 		}
 	}
 }
-
-void TwowaySocket::RegisterServerMessageCallbackFunc(ServerMessageCallbackFunc func)
-{
-	if (m_ServerPtr != nullptr)
-	{
-		m_ServerPtr->RegisterServerMessageCallbackFunc(func);
-	}
-}

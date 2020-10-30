@@ -33,9 +33,6 @@ public:
 	// 发送数据到两个客户端
 	void SendDataToRemoteServer(const char* data, int length);
 
-	// 注册服务器收到客户端消息回调函数
-	void RegisterServerMessageCallbackFunc(ServerMessageCallbackFunc func);
-
 private:
 	std::shared_ptr<AsynServerSocket> m_ServerPtr;
 	std::vector<AsynClientSocket::ptr> m_ClientPtrVector;

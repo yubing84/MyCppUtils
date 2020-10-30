@@ -1,21 +1,26 @@
 #ifndef ASYN_SERVER_SOCKET_H
 #define ASYN_SERVER_SOCKET_H
 
-// Windows套接字需要的
+
 #include "winsock2.h"
 #include <WS2tcpip.h>
-#pragma comment(lib, "ws2_32.lib")
+
+
+// Windows套接字需要的
+//#include "winsock2.h"
+//#include <WS2tcpip.h>
+//#pragma comment(lib, "ws2_32.lib")
 
 #include <string>
 #include <thread>
 #include <memory>
-#include <vector>
+#include <map>
 #include <mutex>
 #include <iostream>
 #include <atomic>
 #include <functional>
 
-typedef std::function<bool(const std::string& message)> ServerMessageCallbackFunc;
+//typedef std::function<bool(const std::string& message)> ServerMessageCallbackFunc;
 
 class AsynServerSocket
 {
@@ -34,23 +39,21 @@ public:
 	// 关闭服务器
 	void CloseServer();
 
-	void RegisterServerMessageCallbackFunc(ServerMessageCallbackFunc func);
+	std::string GetMessage();
 private:
 	void ServerProcessThreadFunction();
 
-	void SingleSocketReciveThreadFunction(int socket);
+	void SingleSocketReciveThreadFunction(int socket, int threadIndex);
 private:
 	SOCKADDR_IN m_ServerAddress;
 	SOCKET m_ServerSocket;
 
 	std::shared_ptr<std::thread> m_ServerMainThreadPtr;
-	std::vector<std::shared_ptr<std::thread>> m_SingleSocketRecvThreadVector;
+	std::map<int,std::shared_ptr<std::thread> > m_SingleSocketRecvThreadMap;
 
 	std::mutex m_SingleSocketMutex;
 
 	std::atomic<bool> m_IsCloseServer;
-
-	ServerMessageCallbackFunc m_ServerMessageCallbackFunc;
 };
 
 #endif // !ASYN_SERVER_SOCKET_H

@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <thread>
 
 std::string ASCII2UTF8(const char* cont)
 {
@@ -129,33 +130,72 @@ bool AsynClientSocket::CreateAndConnectToRemoteServer()
 
 bool AsynClientSocket::SendDataToRemoteServer(const std::string& str)
 {
+	std::shared_ptr<std::thread> threadPtr = std::make_shared<std::thread>([=] {
+		std::cout << "异步子线程执行" << std::endl;	
+
+		std::string utf8Str = str;
+
+		int length = str.length();
+
+		char* messageByte = new char[utf8Str.length() + 4];
+
+		byte dataLengthByteArray[4];
+
+		intToByte(utf8Str.length(), dataLengthByteArray);
+
+		memcpy(messageByte, dataLengthByteArray, 4);
+
+		memcpy(messageByte + 4, utf8Str.c_str(), utf8Str.length());
+
+		int result = send(m_Socket, (char*)messageByte, sizeof(char) * utf8Str.length() + 4, 0);
+
+		if (SOCKET_ERROR == result)
+		{
+			//关闭套接字
+			closesocket(m_Socket);
+			//释放套接字资源
+			WSACleanup();
+
+			return false;
+		}
+
+		delete[] messageByte;
+
+		std::cout << "异步子线程完成" << std::endl;
+
+		});
+	threadPtr->detach();
+
+
 	//std::string utf8Str = ASCII2UTF8(str.c_str());
 
-	std::string utf8Str = str;
+	//std::string utf8Str = str;
 
-	char* messageByte = new char[utf8Str.length() + 4];
+	//int length = str.length();
 
-	byte dataLengthByteArray[4];
+	//char* messageByte = new char[utf8Str.length() + 4];
 
-	intToByte(utf8Str.length(), dataLengthByteArray);
+	//byte dataLengthByteArray[4];
 
-	memcpy(messageByte, dataLengthByteArray, 4);
+	//intToByte(utf8Str.length(), dataLengthByteArray);
 
-	memcpy(messageByte + 4, utf8Str.c_str(), utf8Str.length());
+	//memcpy(messageByte, dataLengthByteArray, 4);
 
-	int result = send(m_Socket, (char*)messageByte, sizeof(char) * utf8Str.length() + 4, 0);
+	//memcpy(messageByte + 4, utf8Str.c_str(), utf8Str.length());
 
-	if (SOCKET_ERROR == result)
-	{
-		//关闭套接字
-		closesocket(m_Socket);
-		//释放套接字资源
-		WSACleanup();
+	//int result = send(m_Socket, (char*)messageByte, sizeof(char) * utf8Str.length() + 4, 0);
 
-		return false;
-	}
+	//if (SOCKET_ERROR == result)
+	//{
+	//	//关闭套接字
+	//	closesocket(m_Socket);
+	//	//释放套接字资源
+	//	WSACleanup();
 
-	delete[] messageByte;
+	//	return false;
+	//}
+
+	//delete[] messageByte;
 
 	return true;
 

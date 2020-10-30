@@ -10,7 +10,7 @@ int main()
 {
 	TwowaySocket twowaySocket;
 
-	twowaySocket.Init("1994", "192.168.0.210", "8661", "127.0.0.1", "1996");
+	twowaySocket.Init("1994", "127.0.0.1", "19966", "127.0.0.1", "1996");
 
 	while (true)
 	{

@@ -4,6 +4,29 @@
 
 #include <iostream>
 
+
+std::string ASCII2UTF8(const char* cont)
+{
+	if (NULL == cont)
+	{
+		return std::string("");
+	}
+
+	int num = MultiByteToWideChar(CP_ACP, NULL, cont, -1, NULL, NULL);
+	wchar_t* buffw = new wchar_t[(unsigned int)num];
+	MultiByteToWideChar(CP_ACP, NULL, cont, -1, buffw, num);
+
+	int len = WideCharToMultiByte(CP_UTF8, 0, buffw, num - 1, NULL, NULL, NULL, NULL);
+	char* lpsz = new char[(unsigned int)len + 1];
+	WideCharToMultiByte(CP_UTF8, 0, buffw, num - 1, lpsz, len, NULL, NULL);
+	lpsz[len] = '\0';
+	delete[] buffw;
+
+	std::string rtn(lpsz);
+	delete[] lpsz;
+	return rtn;
+}
+
 std::string UTF82ASCII(const char* cont)
 {
 	if (NULL == cont)
@@ -23,25 +46,9 @@ std::string UTF82ASCII(const char* cont)
 	return rtn;
 }
 
-//int 转 4字节 BYTE[],
-void intToByte(int i, BYTE abyte[],int size= 4)
-{
-	memset(abyte, 0, sizeof(byte) * size);
-
-	abyte[3] = (byte)(0xff & i);
-
-	abyte[2] = (byte)((0xff00 & i) >> 8);
-
-	abyte[1] = (byte)((0xff0000 & i) >> 16);
-
-	abyte[0] = (byte)((0xff000000 & i) >> 24);
-
-}
-
 //4字节 BYTE[] 转 int 
 int bytesToInt(BYTE bytes[])
 {
-
 	int addr = bytes[3] & 0xFF;
 
 	addr |= ((bytes[2] << 8) & 0xFF00);
@@ -54,7 +61,6 @@ int bytesToInt(BYTE bytes[])
 
 	return addr;
 }
-
 
 
 AsynServerSocket::AsynServerSocket()
@@ -91,7 +97,7 @@ bool AsynServerSocket::CreateServerSocket()
 	{
 		return false;
 	}
-	std::cout << "初始化Windows套接字成功" << std::endl;
+	//std::cout << "初始化Windows套接字成功" << std::endl;
 
 	// 创建套接字
 	m_ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -100,7 +106,7 @@ bool AsynServerSocket::CreateServerSocket()
 		WSACleanup();
 		return false;
 	}
-	std::cout << "创建服务器套接字成功" << std::endl;
+	//std::cout << "创建服务器套接字成功" << std::endl;
 
 	// 设置套接字为非阻塞模式
 	//unsigned long ul = 1;
@@ -121,7 +127,7 @@ bool AsynServerSocket::CreateServerSocket()
 		return false;
 	}
 
-	std::cout << "绑定服务器套接字成功" << std::endl;
+	//std::cout << "绑定服务器套接字成功" << std::endl;
 
 	// 开始监听
 	result = listen(m_ServerSocket, 5);
@@ -132,7 +138,7 @@ bool AsynServerSocket::CreateServerSocket()
 		return false;
 	}
 
-	std::cout << "服务器套接字开始监听" << std::endl;
+	//std::cout << "服务器套接字开始监听" << std::endl;
 
 	// 开始接受客户端请求
 	m_ServerMainThreadPtr = std::make_shared<std::thread>(&AsynServerSocket::ServerProcessThreadFunction,this);
@@ -149,12 +155,44 @@ void AsynServerSocket::CloseServer()
 	closesocket(m_ServerSocket);
 	WSACleanup();
 
+	// 等待接收连接子线程退出
 	m_ServerMainThreadPtr->join();
+
+	// 等待所有接收数据子线程退出
+
+	std::map<int, std::shared_ptr<std::thread>>::iterator iter1;
+	for (iter1 = m_SingleSocketRecvThreadMap.begin(); iter1 != m_SingleSocketRecvThreadMap.end(); iter1++)
+	{
+		closesocket(iter1->first);
+	}
+
+	std::map<int, std::shared_ptr<std::thread>>::iterator iter;
+	for (iter = m_SingleSocketRecvThreadMap.begin(); iter != m_SingleSocketRecvThreadMap.end(); iter++)
+	{
+		if (iter->second != nullptr)
+		{
+			iter->second->join();
+		}
+	}
+
+	// 删除map中的所有子线程
+	std::map<int, std::shared_ptr<std::thread>>::iterator iter2 = m_SingleSocketRecvThreadMap.begin();
+
+	while (iter2 != m_SingleSocketRecvThreadMap.end())
+	{
+		iter2->second.reset();
+
+		iter2 = m_SingleSocketRecvThreadMap.erase(iter2);
+	}
+	m_SingleSocketRecvThreadMap.clear();
+
 }
 
-void AsynServerSocket::RegisterServerMessageCallbackFunc(ServerMessageCallbackFunc func)
+std::string AsynServerSocket::GetMessage()
 {
-	m_ServerMessageCallbackFunc = func;
+	std::string result;
+
+	return "";
 }
 
 void AsynServerSocket::ServerProcessThreadFunction()
@@ -172,24 +210,40 @@ void AsynServerSocket::ServerProcessThreadFunction()
 
 		clientSocket = accept(m_ServerSocket, (SOCKADDR*)&addrClient, &len);
 
-		std::cout << "一个客户端已连接到服务器，socket是：" << clientSocket << std::endl;
+		if (clientSocket != SOCKET_ERROR)
+		{
+			std::cout << "一个客户端已连接到服务器，socket是：" << clientSocket << std::endl;
 
-		std::shared_ptr<std::thread> singleSocketRecvThread = std::make_shared<std::thread>(&AsynServerSocket::SingleSocketReciveThreadFunction, this, clientSocket);
-		singleSocketRecvThread->detach();
+			//int threadIndex = m_SingleSocketRecvThreadMap.size();
+
+
+			std::shared_ptr<std::thread> singleSocketRecvThread = std::make_shared<std::thread>(&AsynServerSocket::SingleSocketReciveThreadFunction, this, clientSocket, clientSocket);
+
+			m_SingleSocketRecvThreadMap[clientSocket] = singleSocketRecvThread;
+		}
 	}
 
 	std::cout << "服务器运行子线程正确退出" << std::endl;
 }
 
-void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
+void AsynServerSocket::SingleSocketReciveThreadFunction(int socket, int threadIndex)
 {
 	int clientSocket = socket;
+	int clientThreadIndex = threadIndex;
 
 	while (true)
 	{
-		char recvBuf[1024] = {0};
+		if (m_IsCloseServer)
+		{
+			closesocket(socket);
 
-		int recvlen = recv(clientSocket, recvBuf, sizeof(recvBuf) , 0);	
+			break;
+		}
+
+
+		char recvBuf[1024] = { 0 };
+
+		int recvlen = recv(clientSocket, recvBuf, sizeof(recvBuf), 0);
 
 		// 客户端已关闭连接
 		if (recvlen == 0)
@@ -213,12 +267,12 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 			// 得到协议格式中数据的长度
 			char dataLengthStr[4];
 			memcpy(dataLengthStr, recvBuf, 4);
-			int dataLength = bytesToInt((byte*)dataLengthStr);
+			int dataLength = bytesToInt((BYTE*)dataLengthStr);
 
 			// 得到当前消息体的数据的长度
 			int messageLength = recvlen - 4;
 
-			char* dataStr = new char[dataLength+1];
+			char* dataStr = new char[dataLength + 1];
 
 			memset(dataStr, 0, dataLength);
 
@@ -235,7 +289,7 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 				// 客户端已关闭连接
 				if (recvbufferLen == 0)
 				{
-					std::cout << "socket连接关闭" << std::endl;
+					//std::cout << "socket连接关闭" << std::endl;
 
 					closesocket(socket);
 
@@ -245,6 +299,7 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 				else if (recvbufferLen == -1)
 				{
 
+
 					break;
 				}
 				else if (recvbufferLen > 0)
@@ -253,13 +308,13 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 
 					if (tempWriteDataLength >= dataLength)
 					{
-						memcpy(dataStr + writeDataLength -1, buffer, dataLength - writeDataLength);
+						memcpy(dataStr + writeDataLength , buffer, dataLength - writeDataLength);
 
 						//break;
 					}
 					else
 					{
-						memcpy(dataStr + writeDataLength -1 , buffer, recvbufferLen);
+						memcpy(dataStr + writeDataLength , buffer, recvbufferLen);
 					}
 
 					writeDataLength = tempWriteDataLength;
@@ -269,16 +324,15 @@ void AsynServerSocket::SingleSocketReciveThreadFunction(int socket)
 
 			dataStr[dataLength] = '\0';
 
-			std::cout << "收到客户端的数据：" << dataStr << std::endl;
-			//for (int i = 0; i < dataLength; ++i)
-			//{
-			//	std::cout << dataStr[i];
-			//}
-			//std::cout << std::endl;
+			// 如果当前服务器没有关闭才想队列中压入数据，防止子线程在处理的过程，而服务器关闭仍然压入数据导致的bug
+			if (!m_IsCloseServer)
+			{
+				std::cout << "收到客户端的数据：" << UTF82ASCII(dataStr) << std::endl;
+			}	
 
 			delete[] dataStr;
 
-		}	
+		}
 	}
 
 	std::cout << "服务器单个接收数据子线程正确退出" << std::endl;
