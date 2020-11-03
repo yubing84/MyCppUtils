@@ -13,9 +13,18 @@ int main()
 	AsynClientSocket clientSocket;
 
 	//clientSocket.SetRemoteServerSocketIPAndPort("192.168.0.210", "8661");
-	clientSocket.SetRemoteServerSocketIPAndPort("192.168.0.221", "8661");
+	clientSocket.SetRemoteServerSocketIPAndPort("127.0.0.1", "1994");
 
-	clientSocket.CreateAndConnectToRemoteServer();
+	if (clientSocket.CreateAndConnectToRemoteServer())
+	{
+		std::cout << "连接服务器成功" << std::endl;
+	}
+	else
+	{
+		std::cout << "连接服务器失败" << std::endl;
+
+		return 0;
+	}
 
 	int A = 0;
 

@@ -81,51 +81,109 @@ bool AsynClientSocket::CreateAndConnectToRemoteServer()
 		return false;
 	}
 
-	// 设置套接字非阻塞模式
-	//unsigned long ul = 1;
-	//result = ioctlsocket(m_Socket, FIONBIO, (unsigned long*)&ul);
-	//if (SOCKET_ERROR == result)
-	//{
-	//	WSACleanup();
-	//	return false;
-	//}
-
-	// 连接服务器
-	while (true)
+	// 设置非阻塞模式连接
+	int iMode = 1;
+	result = ioctlsocket(m_Socket, FIONBIO, (unsigned long*)&iMode);
+	if (SOCKET_ERROR == result)
 	{
-		result = connect(m_Socket, (LPSOCKADDR)&m_RemoteServerAddress, sizeof(m_RemoteServerAddress));
-		if (SOCKET_ERROR == result)
+		WSACleanup();
+		return false;
+	}
+
+	// 设置超时时间
+	struct timeval tm;
+	tm.tv_sec = 2;
+	tm.tv_usec = 0;
+
+	// 尝试连接客户端
+	result = connect(m_Socket, (LPSOCKADDR)&m_RemoteServerAddress, sizeof(m_RemoteServerAddress));
+	if (-1 != result)
+	{
+		return true;
+	}
+	else
+	{
+		fd_set set;
+		FD_ZERO(&set);
+		FD_SET(m_Socket, &set);
+
+		if (select(-1, NULL, &set, NULL, &tm) <= 0)
 		{
-			int nErrCode = WSAGetLastError();
-			if (WSAEWOULDBLOCK == nErrCode || WSAEINVAL == nErrCode)    //连接还没有完成
-			{
-				continue;
-			}
-			else if (WSAEISCONN == nErrCode)//连接已经完成
-			{
-				break;
-			}
-			else//其它原因，连接失败
+			return false;
+		}
+		else
+		{
+			int error = -1;
+			int optLen = sizeof(int);
+			getsockopt(m_Socket, SOL_SOCKET, SO_ERROR, (char*)&error, &optLen);
+
+			// 之所以下面的程序不写成三目运算符的形式， 是为了更直观， 便于注释
+			if (0 != error)
 			{
 				//关闭套接字
 				closesocket(m_Socket);
 				//释放套接字资源
 				WSACleanup();
 
-				std::cout << "远程服务器连接失败" << std::endl;
-
 				return false;
 			}
-		}
-		else if(result == 0)
-		{
-			break;
+			else
+			{
+				// 设回为阻塞socket
+				iMode = 0;
+				ioctlsocket(m_Socket, FIONBIO, (u_long FAR*) & iMode); //设置为阻塞模式
+
+				return true;
+			}
 		}
 	}
 
-	std::cout << "连接远程服务器成功" << std::endl;
 
-	return true;
+
+	// 连接服务器
+	//while (true)
+	//{
+	//	result = connect(m_Socket, (LPSOCKADDR)&m_RemoteServerAddress, sizeof(m_RemoteServerAddress));
+	//	if (SOCKET_ERROR == result)
+	//	{
+	//		int nErrCode = WSAGetLastError();
+	//		if (WSAEWOULDBLOCK == nErrCode || WSAEINVAL == nErrCode)    //连接还没有完成
+	//		{
+	//			continue;
+	//		}
+	//		else if (WSAEISCONN == nErrCode)//连接已经完成
+	//		{
+	//			break;
+	//		}
+	//		else//其它原因，连接失败
+	//		{
+	//			//关闭套接字
+	//			closesocket(m_Socket);
+	//			//释放套接字资源
+	//			WSACleanup();
+
+	//			std::cout << "远程服务器连接失败" << std::endl;
+
+	//			return false;
+	//		}
+	//	}
+	//	else if(result == 0)
+	//	{
+	//		break;
+	//	}
+	//}
+
+	//result = connect(m_Socket, (LPSOCKADDR)&m_RemoteServerAddress, sizeof(m_RemoteServerAddress));
+	//if (SOCKET_ERROR == result)
+	//{
+	//	std::cout << "连接服务器失败" << std::endl;
+	//	return false;
+	//}
+
+
+	//std::cout << "连接远程服务器成功" << std::endl;
+
+	//return true;
 }
 
 bool AsynClientSocket::SendDataToRemoteServer(const std::string& str)
