@@ -15,3 +15,4 @@ MyCppUtils包含了一些C++在实际项目开发过程常用的一些工具代�
 - AsynServerSocket ：异步的Socket服务端
 - TwowaySocket：既做Socket服务器同时也做Socket客户端的栗子
 - PortOccupation：Windows端口占用检测工具类
+- CharactersetConvert：字符集转换工具类

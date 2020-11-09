@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwowaySocket", "TwowaySocke
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PortOccupation", "PortOccupation.vcxproj", "{F3D16D6B-026D-487F-B3DC-3E56F8199726}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CharactersetConvert", "CharactersetConvert.vcxproj", "{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -121,6 +123,14 @@ Global
 		{F3D16D6B-026D-487F-B3DC-3E56F8199726}.Release|x64.Build.0 = Release|x64
 		{F3D16D6B-026D-487F-B3DC-3E56F8199726}.Release|x86.ActiveCfg = Release|Win32
 		{F3D16D6B-026D-487F-B3DC-3E56F8199726}.Release|x86.Build.0 = Release|Win32
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Debug|x64.ActiveCfg = Debug|x64
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Debug|x64.Build.0 = Debug|x64
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Debug|x86.ActiveCfg = Debug|Win32
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Debug|x86.Build.0 = Debug|Win32
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Release|x64.ActiveCfg = Release|x64
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Release|x64.Build.0 = Release|x64
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Release|x86.ActiveCfg = Release|Win32
+		{147B55A9-0CDD-445A-B1BA-D4FD75F179F2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
