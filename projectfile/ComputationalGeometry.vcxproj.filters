@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\ComputationalGeometry\main.cpp" />
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrLine2D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrLine3D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrPlane3D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrRay2D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrRay3D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrRectangle2D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrSegment2D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrSegment3D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrTriangle2D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ComputationalGeometry\ComputationalGeometry\SrTriangle3D.cpp">
+      <Filter>ComputationalGeometry</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ComputationalGeometry">
+      <UniqueIdentifier>{cdcb4151-b283-46b0-9d88-b0b04590be7a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrDataType.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrGeometricTools.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrLine2D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrLine3D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrMath.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrPlane3D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrPrimitive.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrRay2D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrRay3D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrRectangle2D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrSegment2D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrSegment3D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrSimpleTypes.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrTriangle2D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrTriangle3D.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrVector2.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ComputationalGeometry\ComputationalGeometry\SrVector3.h">
+      <Filter>ComputationalGeometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
