@@ -17,6 +17,12 @@ public:
 	{
 
 	};
+
+	static A::ptr GetSingleton()
+	{
+		return Singleton<A>::GetInstance();
+	}
+
 public:
 	int m_Value;
 };
@@ -28,6 +34,8 @@ int main()
 	std::cout << "m_Value = " << m_pA->m_Value << std::endl;
 
 	std::cout << "m_Value2 = " << Singleton<A>::GetInstance()->m_Value << std::endl;
+
+	std::cout << "m_Value3 = " << A::GetSingleton()->m_Value << std::endl;
 
 	getchar();
 
