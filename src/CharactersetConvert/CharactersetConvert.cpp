@@ -3,31 +3,31 @@
 #include <codecvt>
 #include <Windows.h>
 
-static std::wstring string_to_wstring(const std::string& s)
+std::wstring CharactersetConvert::string_to_wstring(const std::string& s)
 {
 	using default_convert = std::codecvt<wchar_t, char, std::mbstate_t>;
-	static std::wstring_convert<default_convert>conv(new default_convert("CHS"));
-	return conv.from_bytes(s);
+	static std::wstring_convert<default_convert> str_to_wstr_conv(new default_convert("CHS"));
+	return str_to_wstr_conv.from_bytes(s);
 }
-static std::string wstring_to_string(const std::wstring& s)
+std::string CharactersetConvert::wstring_to_string(const std::wstring& s)
 {
 	using default_convert = std::codecvt<wchar_t, char, std::mbstate_t>;
-	static std::wstring_convert<default_convert>conv(new default_convert("CHS"));
-	return conv.to_bytes(s);
+	static std::wstring_convert<default_convert> wstr_to_str_conv(new default_convert("CHS"));
+	return wstr_to_str_conv.to_bytes(s);
 }
 
 
 std::string CharactersetConvert::Std_AnsiToUTF8(const std::string& ansiStr)
 {
-	static std::wstring_convert<std::codecvt_utf8<wchar_t> > conv;
+	static std::wstring_convert<std::codecvt_utf8<wchar_t> > ansi_to_utf8_conv;
 
-	return conv.to_bytes(string_to_wstring(ansiStr));
+	return ansi_to_utf8_conv.to_bytes(string_to_wstring(ansiStr));
 }
 
 std::string CharactersetConvert::Std_UTF8ToAnsi(const std::string& utf8Str)
 {
-	static std::wstring_convert<std::codecvt_utf8<wchar_t> > conv;
-	return wstring_to_string(conv.from_bytes(utf8Str));
+	static std::wstring_convert<std::codecvt_utf8<wchar_t> > utf8_to_ansi_conv;
+	return wstring_to_string(utf8_to_ansi_conv.from_bytes(utf8Str));
 }
 
 std::string CharactersetConvert::Std_UnicodeToUTF8(const std::wstring& unicodeStr)
@@ -35,8 +35,8 @@ std::string CharactersetConvert::Std_UnicodeToUTF8(const std::wstring& unicodeSt
 	std::string ret;
 	try 
 	{
-		std::wstring_convert< std::codecvt_utf8<wchar_t> > wcv;
-		ret = wcv.to_bytes(unicodeStr);
+		static std::wstring_convert< std::codecvt_utf8<wchar_t> > unicode_to_utf8_conv;
+		ret = unicode_to_utf8_conv.to_bytes(unicodeStr);
 	}
 	catch (const std::exception& e) 
 	{
@@ -50,8 +50,8 @@ std::wstring CharactersetConvert::Std_UTF8ToUnicode(const std::string& utf8Str)
 	std::wstring ret;
 	try 
 	{
-		std::wstring_convert< std::codecvt_utf8<wchar_t> > wcv;
-		ret = wcv.from_bytes(utf8Str);
+		static std::wstring_convert< std::codecvt_utf8<wchar_t> > utf8_to_unicode_conv;
+		ret = utf8_to_unicode_conv.from_bytes(utf8Str);
 	}
 	catch (const std::exception& e) 
 	{

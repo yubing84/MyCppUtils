@@ -6,6 +6,9 @@
 class CharactersetConvert
 {
 public:
+	static std::wstring string_to_wstring(const std::string& s);
+	static std::string wstring_to_string(const std::wstring& s);
+
 	static std::string Std_AnsiToUTF8(const std::string& ansiStr);
 	static std::string Std_UTF8ToAnsi(const std::string& utf8Str);
 	static std::string Std_UnicodeToUTF8(const std::wstring& unicodeStr);
